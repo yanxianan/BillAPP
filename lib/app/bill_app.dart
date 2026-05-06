@@ -14,7 +14,7 @@ class BillApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2563EB)),
         useMaterial3: true,
       ),
-      home: const RecordScreen(),
+      home: RecordScreen(),
     );
   }
 }

@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 
 import '../../../shared/money/money.dart';
+import '../../../shared/database/database_connection.dart';
 import '../application/create_transaction_use_case.dart';
 import '../application/get_recent_transactions_use_case.dart';
-import '../data/in_memory_transaction_repository.dart';
 import '../data/seed_categories.dart';
+import '../data/sqlite_transaction_repository.dart';
+import '../data/transaction_repository.dart';
 import '../domain/category.dart';
 import '../domain/transaction.dart';
 import '../domain/transaction_type.dart';
 
 class RecordScreen extends StatefulWidget {
-  const RecordScreen({super.key});
+  RecordScreen({super.key, TransactionRepository? repository})
+      : repository =
+            repository ?? SqliteTransactionRepository(openAppDatabase());
+
+  final TransactionRepository repository;
 
   @override
   State<RecordScreen> createState() => _RecordScreenState();
@@ -18,10 +24,10 @@ class RecordScreen extends StatefulWidget {
 
 class _RecordScreenState extends State<RecordScreen> {
   final _amountController = TextEditingController();
-  final _repository = InMemoryTransactionRepository();
 
-  late final _create = CreateTransactionUseCase(repository: _repository);
-  late final _getRecent = GetRecentTransactionsUseCase(repository: _repository);
+  late final _create = CreateTransactionUseCase(repository: widget.repository);
+  late final _getRecent =
+      GetRecentTransactionsUseCase(repository: widget.repository);
 
   TransactionType _type = TransactionType.expense;
   Category? _selectedCategory;
