@@ -1,303 +1,304 @@
-# BillAPP v0.1 MVP Design
+# BillAPP v0.1 MVP 设计文档
 
-Date: 2026-05-06
-Status: Draft for user review
+日期：2026-05-06
+状态：待用户评审
 
-## 1. Product Direction
+## 1. 产品方向
 
-BillAPP v0.1 is a local-first, minimal mobile bookkeeping app. The product goal is to let a user record a normal expense in about 3 seconds.
+BillAPP v0.1 是一款本地优先的极简手机记账 App。产品目标是让用户在大约 3 秒内完成一笔常规支出记录。
 
-The MVP focuses on one core habit: open the app, enter an amount, choose a category, and save. It avoids account login, cloud sync, custom categories, budget management, and AI classification in the first version.
+MVP 聚焦一个核心习惯：打开 App，输入金额，选择分类，保存。第一版不做账号登录、云同步、自定义分类、预算管理和 AI 自动分类。
 
-## 2. Target Experience
+## 2. 目标体验
 
-The main screen is the primary workspace. When the user opens the app, the amount input is immediately ready. The default transaction type is expense. The user enters an amount, selects a fixed category, and saves the transaction.
+首页就是主要工作台。用户打开 App 后，金额输入区立即可用。交易类型默认是支出。用户输入金额，选择一个固定分类，然后保存这笔记录。
 
-After saving, the app clears the input and refreshes the recent transaction list. The user should be able to confirm the record without leaving the main screen.
+保存后，App 清空输入内容并刷新最近账单列表。用户不需要离开首页，就能确认刚才的记录已经保存成功。
 
-## 3. MVP Scope
+## 3. MVP 范围
 
-### Included
+### 包含
 
-- Fast transaction creation
-- Expense and income transaction types
-- Fixed system categories
-- Recent transaction list
-- Transaction detail, edit, and delete
-- Monthly income, expense, and balance summary
-- Expense category ranking
-- Recent 7-day spending trend
-- Local SQLite storage
-- Manual CSV export
-- Manual JSON export
-- Default account stored in the data model but not emphasized in the UI
+- 快速记一笔
+- 支出和收入两种交易类型
+- 固定系统分类
+- 最近账单列表
+- 账单详情、编辑和删除
+- 月度收入、支出和结余汇总
+- 支出分类排行
+- 最近 7 天支出趋势
+- 本地 SQLite 存储
+- 手动导出 CSV
+- 手动导出 JSON
+- 数据模型保留默认账户，但界面不强调账户概念
 
-### Excluded From v0.1
+### v0.1 不包含
 
-- Account registration and login
-- Cloud sync
-- Budget management
-- Asset and account management UI
-- Custom category creation or editing
-- AI classification
-- Receipt image recognition
-- Multi-person or family ledger
+- 账号注册和登录
+- 云同步
+- 预算管理
+- 资产和账户管理界面
+- 自定义分类创建或编辑
+- AI 自动分类
+- 小票图片识别
+- 多人账本或家庭账本
 
-## 4. Navigation And Pages
+## 4. 导航与页面
 
-The app uses a lightweight bottom navigation with three tabs:
+App 使用轻量的底部导航，包含三个标签：
 
-- Record
-- Statistics
-- Settings
+- 记账
+- 统计
+- 设置
 
-The bill list appears on the Record screen as a recent transactions section instead of becoming a separate tab. This keeps the first version focused and light.
+账单列表作为“记账”页里的最近记录区域出现，不单独占用一个标签页。这样第一版可以保持聚焦和轻量。
 
-### Record Screen
+### 记账页
 
-The Record screen contains:
+记账页包含：
 
-- Amount input
-- Expense/income switch, defaulting to expense
-- Fixed category grid
-- Optional note entry
-- Save action
-- Recent 10 transactions
+- 金额输入
+- 支出/收入切换，默认支出
+- 固定分类网格
+- 可选备注入口
+- 保存操作
+- 最近 10 条账单
 
-### Statistics Screen
+### 统计页
 
-The Statistics screen contains:
+统计页包含：
 
-- Current month income
-- Current month expense
-- Current month balance
-- Expense category ranking
-- Recent 7-day spending trend
-- Empty state when no transaction data exists
+- 本月收入
+- 本月支出
+- 本月结余
+- 支出分类排行
+- 最近 7 天支出趋势
+- 无账单数据时的空状态
 
-### Settings Screen
+### 设置页
 
-The Settings screen contains:
+设置页包含：
 
-- Export CSV
-- Export JSON
-- Privacy/data storage explanation
-- Basic app information
+- 导出 CSV
+- 导出 JSON
+- 隐私和本地数据说明
+- App 基础信息
 
-## 5. Functional Requirements
+## 5. 功能需求
 
-### Fast Transaction Creation
+### 快速记一笔
 
-The user can create a transaction with:
+用户可以用以下字段创建一笔账单：
 
-- Type: expense or income
-- Amount: required, greater than zero
-- Category: required
-- Note: optional
-- Occurred time: defaults to current time
-- Account: stored as the default account in v0.1
+- 类型：支出或收入
+- 金额：必填，且必须大于 0
+- 分类：必选
+- 备注：可选
+- 发生时间：默认当前时间
+- 账户：v0.1 使用默认账户存储
 
-Saving a transaction must:
+保存账单时必须：
 
-- Persist it locally
-- Clear the amount input
-- Reset the note input
-- Refresh the recent transaction list
-- Keep the user on the Record screen
+- 将数据持久化到本地
+- 清空金额输入
+- 重置备注输入
+- 刷新最近账单列表
+- 让用户停留在记账页
 
-### Fixed Categories
+### 固定分类
 
-Expense categories use stable internal IDs and Simplified Chinese display names:
+支出分类使用稳定的内部 ID 和简体中文显示名：
 
-- `food`: 餐饮
-- `transport`: 交通
-- `shopping`: 购物
-- `entertainment`: 娱乐
-- `housing`: 住房
-- `medical`: 医疗
-- `education`: 学习
-- `other_expense`: 其他
+- `food`：餐饮
+- `transport`：交通
+- `shopping`：购物
+- `entertainment`：娱乐
+- `housing`：住房
+- `medical`：医疗
+- `education`：学习
+- `other_expense`：其他
 
-Income categories use stable internal IDs and Simplified Chinese display names:
+收入分类使用稳定的内部 ID 和简体中文显示名：
 
-- `salary`: 工资
-- `part_time`: 兼职
-- `investment`: 理财
-- `gift`: 礼金
-- `other_income`: 其他
+- `salary`：工资
+- `part_time`：兼职
+- `investment`：理财
+- `gift`：礼金
+- `other_income`：其他
 
-The first version does not support category creation, deletion, editing, or sorting.
+第一版不支持分类创建、删除、编辑或排序。
 
-### Transaction Records
+### 账单记录
 
-The app shows the latest 10 transactions on the Record screen. A user can open a transaction detail view and edit:
+App 在记账页展示最近 10 条账单。用户可以打开账单详情，并编辑以下内容：
 
-- Amount
-- Type
-- Category
-- Note
-- Occurred time
+- 金额
+- 类型
+- 分类
+- 备注
+- 发生时间
 
-The user can delete a transaction after a confirmation prompt.
+用户删除账单前，App 必须弹出确认提示。
 
-### Statistics
+### 统计
 
-The app calculates statistics from local transaction records:
+App 基于本地账单记录计算统计数据：
 
-- Monthly income
-- Monthly expense
-- Monthly balance
-- Expense total by category
-- Recent 7-day expense trend
+- 月度收入
+- 月度支出
+- 月度结余
+- 按分类汇总的支出金额
+- 最近 7 天支出趋势
 
-Statistics must be consistent with the underlying transactions.
+统计结果必须与底层账单数据保持一致。
 
-### Export Backup
+### 导出备份
 
-The app supports manual export in CSV and JSON formats.
+App 支持手动导出 CSV 和 JSON 两种格式。
 
-Exported fields:
+导出字段包含：
 
-- id
-- type
-- amount
-- amountMinor
-- categoryId
-- categoryName
-- accountId
-- note
-- occurredAt
-- createdAt
-- updatedAt
+- `id`
+- `type`
+- `amount`
+- `amountMinor`
+- `categoryId`
+- `categoryName`
+- `accountId`
+- `note`
+- `occurredAt`
+- `createdAt`
+- `updatedAt`
 
-The exported data must be parseable and complete enough for future restore/import support, although import is not part of v0.1.
+导出数据必须可解析，并且字段完整到足以支持未来的恢复或导入功能。导入功能不属于 v0.1 范围。
 
-## 6. Non-Functional Requirements
+## 6. 非功能需求
 
-- Core features must work offline.
-- Data must persist after app restart.
-- Money calculations must avoid floating-point precision errors.
-- The first version defaults to CNY and stores amounts as integer fen.
-- The first version uses Simplified Chinese UI text.
-- Database IDs and enum values use stable English keys; UI display names use Simplified Chinese.
-- Local data should remain on the device unless the user explicitly exports it.
-- Main record creation should feel immediate on ordinary mobile devices.
-- Empty and error states should be understandable without lengthy explanations.
+- 核心功能必须离线可用。
+- App 重启后数据必须保留。
+- 金额计算必须避免浮点精度误差。
+- 第一版默认货币为人民币。
+- 金额以整数“分”为单位存储。
+- 第一版界面文案使用简体中文。
+- 数据库 ID 和枚举值使用稳定英文 key，界面显示名使用简体中文。
+- 除非用户主动导出，账单数据应保留在本机。
+- 主记账流程在普通手机设备上应有即时响应感。
+- 空状态和错误状态应清晰易懂，不依赖长篇说明。
 
-## 7. Acceptance Criteria
+## 7. 验收标准
 
-- A user can create a no-note expense from app launch in about 3 seconds.
-- The app prevents saving empty, zero, or negative amounts.
-- The app prevents saving without a category.
-- The recent transaction list updates after creation, editing, and deletion.
-- Deleting a transaction requires confirmation.
-- The app remains usable without network access.
-- Transactions remain after the app restarts.
-- Monthly statistics match the transaction data.
-- CSV and JSON exports include all required fields.
+- 用户可以从打开 App 开始，在大约 3 秒内完成一笔无备注支出记录。
+- App 阻止保存空金额、0 金额或负数金额。
+- App 阻止保存没有分类的账单。
+- 最近账单列表会在新增、编辑、删除后刷新。
+- 删除账单需要用户确认。
+- App 在无网络环境下仍可使用。
+- App 重启后账单记录不丢失。
+- 月度统计结果与账单数据一致。
+- CSV 和 JSON 导出包含所有必需字段。
 
-## 8. Recommended Technical Stack
+## 8. 推荐技术栈
 
-The recommended stack is Flutter with Drift and SQLite.
+推荐技术栈是 Flutter + Drift + SQLite。
 
-Reasons:
+原因：
 
-- Flutter provides stable cross-platform mobile development for iOS and Android.
-- SQLite is reliable for local-first bookkeeping data.
-- Drift provides typed queries, migrations, and testable database access.
-- The first version does not need a backend service.
+- Flutter 可以稳定支持 iOS 和 Android 跨平台移动开发。
+- SQLite 适合本地优先的记账数据。
+- Drift 提供类型安全查询、数据库迁移和可测试的数据访问层。
+- 第一版不需要后端服务。
 
-React Native with Expo and SQLite is a viable alternative if the project later prioritizes a JavaScript/React ecosystem, but Flutter is the preferred option for this MVP.
+如果项目后续更重视 JavaScript/React 生态，也可以考虑 React Native + Expo + SQLite。但对于这个 MVP，Flutter 是首选方案。
 
-## 9. Architecture
+## 9. 架构设计
 
-The app should use a simple layered architecture.
+App 使用简单分层架构。
 
-### Presentation
+### 表现层
 
-Responsible for UI and user interactions:
+负责界面和用户交互：
 
-- Record screen
-- Statistics screen
-- Settings screen
-- Transaction detail/edit view
+- 记账页
+- 统计页
+- 设置页
+- 账单详情/编辑视图
 
-### Application
+### 应用层
 
-Responsible for use cases:
+负责用例编排：
 
-- CreateTransactionUseCase
-- UpdateTransactionUseCase
-- DeleteTransactionUseCase
-- GetRecentTransactionsUseCase
-- GetMonthlyStatsUseCase
-- ExportBackupUseCase
+- `CreateTransactionUseCase`
+- `UpdateTransactionUseCase`
+- `DeleteTransactionUseCase`
+- `GetRecentTransactionsUseCase`
+- `GetMonthlyStatsUseCase`
+- `ExportBackupUseCase`
 
-### Domain
+### 领域层
 
-Responsible for business concepts and validation:
+负责业务概念和校验规则：
 
-- Transaction
-- Category
-- Account
-- Money
-- TransactionType
+- `Transaction`
+- `Category`
+- `Account`
+- `Money`
+- `TransactionType`
 
-Rules:
+规则：
 
-- Amount must be greater than zero.
-- Category must exist and match the transaction type.
-- Occurred time is required.
-- Money is stored as minor units.
+- 金额必须大于 0。
+- 分类必须存在，并且必须匹配账单类型。
+- 发生时间必填。
+- 金额以最小货币单位存储。
 
-### Data
+### 数据层
 
-Responsible for persistence and export:
+负责持久化和导出：
 
-- SQLite database
-- Drift tables and DAOs
-- Repositories
-- Seed data
-- Database migrations
-- CSV exporter
-- JSON exporter
+- SQLite 数据库
+- Drift 表和 DAO
+- Repository
+- 种子数据
+- 数据库迁移
+- CSV 导出器
+- JSON 导出器
 
-## 10. Data Model
+## 10. 数据模型
 
-### transactions
+### `transactions`
 
-- id: string
-- type: expense or income
-- amountMinor: integer
-- categoryId: string
-- accountId: string
-- note: nullable string
-- occurredAt: datetime
-- createdAt: datetime
-- updatedAt: datetime
-- deletedAt: nullable datetime
+- `id`：字符串
+- `type`：`expense` 或 `income`
+- `amountMinor`：整数
+- `categoryId`：字符串
+- `accountId`：字符串
+- `note`：可空字符串
+- `occurredAt`：日期时间
+- `createdAt`：日期时间
+- `updatedAt`：日期时间
+- `deletedAt`：可空日期时间
 
-### categories
+### `categories`
 
-- id: string
-- type: expense or income
-- name: string
-- icon: string
-- sortOrder: integer
-- isSystem: boolean
+- `id`：字符串
+- `type`：`expense` 或 `income`
+- `name`：字符串
+- `icon`：字符串
+- `sortOrder`：整数
+- `isSystem`：布尔值
 
-### accounts
+### `accounts`
 
-- id: string
-- name: string
-- type: string
-- isDefault: boolean
-- createdAt: datetime
-- updatedAt: datetime
+- `id`：字符串
+- `name`：字符串
+- `type`：字符串
+- `isDefault`：布尔值
+- `createdAt`：日期时间
+- `updatedAt`：日期时间
 
-v0.1 initializes one default account. The UI does not need account selection yet.
+v0.1 初始化一个默认账户，界面暂时不需要账户选择。
 
-## 11. Suggested Repository Structure
+## 11. 建议仓库结构
 
 ```text
 lib/
@@ -324,129 +325,130 @@ docs/
   iterations/
 ```
 
-## 12. Testing Strategy
+## 12. 测试策略
 
-### Unit Tests
+### 单元测试
 
-- Money validation and formatting
-- Transaction validation
-- Category matching by transaction type
-- Monthly statistics calculations
-- Export data mapping
+- 金额校验和格式化
+- 账单校验
+- 分类与账单类型匹配
+- 月度统计计算
+- 导出数据映射
 
-### Repository Tests
+### Repository 测试
 
-- Create transaction
-- Update transaction
-- Delete transaction
-- Query latest transactions
-- Query monthly transactions
+- 创建账单
+- 更新账单
+- 删除账单
+- 查询最近账单
+- 查询月度账单
 
-### UI Tests
+### UI 测试
 
-- Enter amount
-- Select category
-- Save transaction
-- See recent transaction update
-- Block invalid amount save
+- 输入金额
+- 选择分类
+- 保存账单
+- 看到最近账单刷新
+- 阻止无效金额保存
 
-### Export Tests
+### 导出测试
 
-- CSV contains required headers and rows
-- JSON contains required fields
-- Exported amount values are consistent with stored minor units
+- CSV 包含必需表头和数据行
+- JSON 包含必需字段
+- 导出金额与存储的最小货币单位保持一致
 
-## 13. AI Agent Workflow
+## 13. AI 代理工作流
 
-The project should use specialized AI agents with clear responsibilities.
+项目应使用职责清晰的专门 AI 代理。
 
-### Research Agent
+### 调研代理
 
-Produces:
+产出：
 
-- User pain points
-- Competitor notes
-- MVP opportunities
-- Product risks and assumptions
+- 用户痛点
+- 竞品记录
+- MVP 机会点
+- 产品风险和假设
 
-### Product Agent
+### 产品代理
 
-Produces:
+产出：
 
 - PRD
-- User stories
-- Functional scope
-- Page flows
-- Acceptance criteria
+- 用户故事
+- 功能范围
+- 页面流程
+- 验收标准
 
-### UX Agent
+### UX 代理
 
-Produces:
+产出：
 
-- Information architecture
-- Main user flows
-- Empty states
-- Error states
-- Component list
+- 信息架构
+- 主要用户流程
+- 空状态
+- 错误状态
+- 组件清单
 
-### Architecture Agent
+### 架构代理
 
-Produces:
+产出：
 
-- Technical design
-- Module boundaries
-- Data model
-- Testing strategy
-- Risk mitigation
+- 技术设计
+- 模块边界
+- 数据模型
+- 测试策略
+- 风险缓解方案
 
-### Implementation Agent
+### 实现代理
 
-Produces:
+产出：
 
-- Code changes
-- Tests
-- Local verification notes
-- Known limitations
+- 代码变更
+- 测试
+- 本地验证说明
+- 已知限制
 
-### Review Agent
+### Review 代理
 
-Produces:
+产出：
 
-- Blocking issues
-- Non-blocking suggestions
-- Missing tests
-- Regression risks
-- Merge recommendation
+- 阻塞问题
+- 非阻塞建议
+- 缺失测试
+- 回归风险
+- 是否建议合并
 
-## 14. Iteration Plan
+## 14. 迭代计划
 
 ### Sprint 001
 
-- Initialize Flutter project
-- Add database foundation
-- Add fixed category seed data
-- Add default account
-- Implement transaction creation
-- Implement recent transaction list
-- Add basic validation and tests
+- 初始化 Flutter 项目
+- 添加数据库基础设施
+- 添加固定分类种子数据
+- 添加默认账户
+- 实现账单创建
+- 实现最近账单列表
+- 添加基础校验和测试
 
 ### Sprint 002
 
-- Implement transaction editing
-- Implement transaction deletion
-- Implement statistics screen
-- Implement CSV export
-- Implement JSON export
-- Implement settings screen
-- Add broader tests
+- 实现账单编辑
+- 实现账单删除
+- 实现统计页
+- 实现 CSV 导出
+- 实现 JSON 导出
+- 实现设置页
+- 补充更完整的测试
 
-## 15. Open Decisions
+## 15. 已确认决策
 
-All decisions needed for v0.1 are resolved:
+v0.1 需要的关键决策均已确认：
 
-- Product direction: minimal fast bookkeeping
-- Main input: amount keypad first
-- Account strategy: reserved in model, hidden in UI
-- Category strategy: fixed system categories
-- Storage strategy: local-first with manual export backup
-- Recommended stack: Flutter, Drift, SQLite
+- 产品方向：极简快速记账
+- 主输入方式：金额键盘优先
+- 账户策略：模型预留，界面隐藏
+- 分类策略：固定系统分类
+- 存储策略：本地优先，手动导出备份
+- 推荐技术栈：Flutter、Drift、SQLite
+
