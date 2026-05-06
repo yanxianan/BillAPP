@@ -6,4 +6,3 @@
 .flutter-plugins-dependencies
 build/
 coverage/
-pubspec.lock

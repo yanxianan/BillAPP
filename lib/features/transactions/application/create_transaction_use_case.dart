@@ -13,8 +13,8 @@ class CreateTransactionUseCase {
     required this.repository,
     IdGenerator? idGenerator,
     DateTime Function()? now,
-  }) : _idGenerator = idGenerator ?? _defaultId,
-       _now = now ?? DateTime.now;
+  })  : _idGenerator = idGenerator ?? _defaultId,
+        _now = now ?? DateTime.now;
 
   final TransactionRepository repository;
   final IdGenerator _idGenerator;

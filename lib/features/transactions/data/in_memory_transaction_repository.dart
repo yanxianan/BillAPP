@@ -11,11 +11,10 @@ class InMemoryTransactionRepository implements TransactionRepository {
 
   @override
   Future<List<Transaction>> getRecent({required int limit}) async {
-    final active =
-        _transactions
-            .where((transaction) => transaction.deletedAt == null)
-            .toList()
-          ..sort((a, b) => b.occurredAt.compareTo(a.occurredAt));
+    final active = _transactions
+        .where((transaction) => transaction.deletedAt == null)
+        .toList()
+      ..sort((a, b) => b.occurredAt.compareTo(a.occurredAt));
     return active.take(limit).toList();
   }
 }
