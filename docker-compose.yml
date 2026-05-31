@@ -1,0 +1,10 @@
+services:
+  test:
+    image: ghcr.io/cirruslabs/flutter:stable
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_NAME: billapp.sqlite
+    command: >
+      bash -c "flutter pub get && flutter test"
