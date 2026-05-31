@@ -6,3 +6,6 @@
 .flutter-plugins-dependencies
 build/
 coverage/
+
+# Environment overrides (keep .env.example tracked)
+.env

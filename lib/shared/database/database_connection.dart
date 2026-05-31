@@ -6,12 +6,13 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'app_database.dart';
+import 'database_config.dart';
 
-AppDatabase openAppDatabase() {
+AppDatabase openAppDatabase({String databaseName = defaultDatabaseName}) {
   return AppDatabase(
     LazyDatabase(() async {
       final directory = await getApplicationDocumentsDirectory();
-      final file = File(p.join(directory.path, 'billapp.sqlite'));
+      final file = File(p.join(directory.path, databaseName));
       return NativeDatabase.createInBackground(file);
     }),
   );
